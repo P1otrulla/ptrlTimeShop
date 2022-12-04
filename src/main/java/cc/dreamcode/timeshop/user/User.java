@@ -3,7 +3,6 @@ package cc.dreamcode.timeshop.user;
 import eu.okaeri.persistence.document.Document;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class User extends Document {
 
@@ -11,20 +10,6 @@ public class User extends Document {
 
     private int currency;
     private int progress;
-
-    public User(String name) {
-        this.name = name;
-    }
-
-    public User(String name, int currency, int progress) {
-        this.name = name;
-        this.currency = currency;
-        this.progress = progress;
-    }
-
-    public UUID uniqueId() {
-        return this.getPath().toUUID();
-    }
 
     public String name() {
         return this.name;
@@ -54,10 +39,6 @@ public class User extends Document {
         this.currency = amount;
 
         this.save();
-    }
-
-    public int progress() {
-        return this.progress;
     }
 
     void addProgress(int currencyMax) {

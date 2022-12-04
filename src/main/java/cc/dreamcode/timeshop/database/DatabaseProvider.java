@@ -21,7 +21,7 @@ import io.lettuce.core.RedisURI;
 
 import java.io.File;
 
-public class DatabaseProvider {
+public final class DatabaseProvider {
 
     private final PluginConfiguration pluginConfiguration;
     private final File dataFolder;
