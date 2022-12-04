@@ -24,7 +24,7 @@ public final class CurrencyPluralizer {
         if (prulars.size() != 3) {
             this.logger.severe("Invalid currency pluarlize list size, using default");
 
-            prulars = Arrays.asList("moneta", "monety", "monet");
+            prulars = Arrays.asList("monete", "monety", "monet");
         }
 
         return Pluralize.pluralize(Locale.forLanguageTag("pl"), amount, prulars.get(0), prulars.get(1), prulars.get(2));

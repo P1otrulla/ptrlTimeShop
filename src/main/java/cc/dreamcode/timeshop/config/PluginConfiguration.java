@@ -1,8 +1,6 @@
 package cc.dreamcode.timeshop.config;
 
 import cc.dreamcode.menu.serdes.bukkit.BukkitMenuBuilder;
-import cc.dreamcode.notice.NoticeType;
-import cc.dreamcode.notice.bukkit.BukkitNotice;
 import cc.dreamcode.timeshop.builder.ItemBuilder;
 import cc.dreamcode.timeshop.config.item.ProductItem;
 import cc.dreamcode.timeshop.config.sub.StorageConfig;
@@ -27,7 +25,7 @@ public final class PluginConfiguration extends OkaeriConfig {
     public int currencyValue = 5;
 
     @Comment({ "", "# Ustaw odmiane monet:" })
-    public List<String> currencyPlurals = Arrays.asList("moneta", "monety", "monet");
+    public List<String> currencyPlurals = Arrays.asList("monete", "monety", "monet");
 
     @Comment({ "", "Ustaw konfiguracje menu:" })
     public BukkitMenuBuilder menu = new BukkitMenuBuilder(
