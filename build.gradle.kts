@@ -97,7 +97,7 @@ tasks {
 }
 
 tasks.withType<ShadowJar> {
-    archiveFileName.set("dreamTimeShop-${project.version}_1.8-1.19.jar")
+    archiveFileName.set("dreamTimeShop-${project.version} (MC 1.8-1.19).jar")
 
     exclude(
         "org/intellij/lang/annotations/**",
@@ -116,8 +116,21 @@ tasks.withType<ShadowJar> {
         "org.bstats",
         "eu.okaeri",
         "net.kyori",
+        "cc.dreamcode.utilities",
         "cc.dreamcode.notice",
-        "org.bstats"
+        "cc.dreamcode.menu",
+        "org.bstats",
+        "com.mongodb",
+        "com.zaxxer",
+        "dev.rollczi",
+        "io.lettuce",
+        "io.netty",
+        "org.bson",
+        "org.json",
+        "org.slf4j",
+        "org.reactivestreams",
+        "panda",
+        "reactor"
     ).forEach { pack ->
         relocate(pack, "$prefix.$pack")
     }
