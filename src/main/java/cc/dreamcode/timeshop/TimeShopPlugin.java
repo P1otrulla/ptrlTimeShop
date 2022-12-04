@@ -12,8 +12,6 @@ import cc.dreamcode.timeshop.command.implementation.TimeShopCommand;
 import cc.dreamcode.timeshop.config.ConfigService;
 import cc.dreamcode.timeshop.config.MessagesConfiguration;
 import cc.dreamcode.timeshop.config.PluginConfiguration;
-import cc.dreamcode.timeshop.product.Product;
-import cc.dreamcode.timeshop.product.ProductPresenter;
 import cc.dreamcode.timeshop.product.ProductService;
 import cc.dreamcode.timeshop.shared.CurrencyPluralizer;
 import cc.dreamcode.timeshop.user.User;
@@ -60,8 +58,6 @@ public class TimeShopPlugin extends JavaPlugin {
     private DocumentPersistence persistence;
     private UserRepository userRepository;
 
-    private ProductService productService;
-
     private LiteCommands<CommandSender> liteCommands;
 
     @Override
@@ -72,10 +68,10 @@ public class TimeShopPlugin extends JavaPlugin {
         this.command = this.configService.create(CommandConfiguration.class, new File(this.getDataFolder(), "commands.yml"));
         this.config = this.configService.create(PluginConfiguration.class, new File(this.getDataFolder(), "config.yml"));
 
-        PersistenceCollection userCollection = PersistenceCollection.of(UserRepository.class);
-
         BukkitMenuProvider.create(this);
         BukkitNoticeProvider.create(this);
+
+        PersistenceCollection userCollection = PersistenceCollection.of(UserRepository.class);
 
         this.persistence = this.prepareStorage();
         this.persistence.registerCollection(userCollection);
@@ -83,18 +79,8 @@ public class TimeShopPlugin extends JavaPlugin {
         this.userRepository = RepositoryDeclaration.of(UserRepository.class)
                 .newProxy(this.persistence, userCollection, this.getClassLoader());
 
-        this.productService = new ProductService();
-
-        this.config.products.values().forEach(product -> {
-            ProductPresenter presenter = product.presenter.toProductPresenter();
-
-            int id = this.productService.products().size() + 1;
-
-            this.productService.addProduct(Product.of(id, product.price, presenter, product.elements));
-        });
-
         CurrencyPluralizer currencyPluralizer = new CurrencyPluralizer(this.config, this.getLogger());
-        TimeShopMenu menu = new TimeShopMenu(this.messages, this.config, currencyPluralizer, this.userRepository, this.productService);
+        TimeShopMenu menu = new TimeShopMenu(this.messages, this.config, currencyPluralizer, this.userRepository, this.config);
 
         this.getServer().getPluginManager().registerEvents(new UserController(this.userRepository), this);
         this.getServer().getScheduler().runTaskTimer(this, new UserPlayingTimeTask(this.userRepository, this.config, this.getServer()), 20, 20);
@@ -130,7 +116,7 @@ public class TimeShopPlugin extends JavaPlugin {
         this.liteCommands.getPlatform().unregisterAll();
     }
 
-    private DocumentPersistence prepareStorage() {
+    DocumentPersistence prepareStorage() {
         try { Class.forName("org.mariadb.jdbc.Driver"); } catch (ClassNotFoundException ignored) { }
         try { Class.forName("org.h2.Driver"); } catch (ClassNotFoundException ignored) { }
 
@@ -144,14 +130,14 @@ public class TimeShopPlugin extends JavaPlugin {
             }
 
             case MYSQL: {
-                 HikariConfig mariadbHikari = new HikariConfig();
+                HikariConfig mariadbHikari = new HikariConfig();
                 mariadbHikari.setJdbcUrl(this.config.storage.uri);
 
                 return new DocumentPersistence(new MariaDbPersistence(persistencePath, mariadbHikari), JsonSimpleConfigurer::new, new SerdesBukkit(), new SerdesCommons());
             }
 
             case H2: {
-                final HikariConfig jdbcHikari = new HikariConfig();
+                HikariConfig jdbcHikari = new HikariConfig();
                 jdbcHikari.setJdbcUrl(this.config.storage.uri);
 
                 return new DocumentPersistence(new H2Persistence(persistencePath, jdbcHikari), JsonSimpleConfigurer::new, new SerdesBukkit(), new SerdesCommons());
@@ -197,7 +183,7 @@ public class TimeShopPlugin extends JavaPlugin {
     }
 
     public ProductService getProductService() {
-        return this.productService;
+        return this.config;
     }
 
     public LiteCommands<CommandSender> getLiteCommands() {

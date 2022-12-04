@@ -24,14 +24,16 @@ public class CommandConfiguration extends OkaeriConfig {
             "timeshopadmin",
             new Command(
                     "timeshopadmin",
+
                     Collections.singletonList("sklepadmin"),
+
                     Collections.singletonList("timeshop.admin"),
 
                     Arrays.asList(
-                            new CommandArgument("add", Collections.singletonList("dodaj"), true),
-                            new CommandArgument("remove", Collections.singletonList("usun"), true),
-                            new CommandArgument("set", Collections.singletonList("ustaw"), true),
-                            new CommandArgument("reload", Collections.singletonList("przeladuj"), true)
+                            new CommandArgument("add", "dodaj"),
+                            new CommandArgument("remove", "usun"),
+                            new CommandArgument("set", "ustaw"),
+                            new CommandArgument("reload", "przeladuj")
                     )
             )
     );
@@ -60,13 +62,11 @@ public class CommandConfiguration extends OkaeriConfig {
     public static class CommandArgument extends OkaeriConfig {
 
         public String name;
-        public List<String> aliases;
-        public boolean removeOld;
+        public String alias;
 
-        public CommandArgument(String name, List<String> aliases, boolean removeOld) {
+        public CommandArgument(String name, String alias) {
             this.name = name;
-            this.aliases = aliases;
-            this.removeOld = removeOld;
+            this.alias = alias;
         }
     }
 }

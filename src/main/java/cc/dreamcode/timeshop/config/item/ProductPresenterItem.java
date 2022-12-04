@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
-public class ProductPresenterItem extends OkaeriConfig {
+public class ProductPresenterItem extends OkaeriConfig implements ProductPresenter {
 
     public String displayName = "&bDiamenty";
     public int slot = 0;
@@ -18,16 +18,18 @@ public class ProductPresenterItem extends OkaeriConfig {
             .setLore(Arrays.asList("&7Zawiera: ", "&e- 32 diamenty", "&e- 1 blok diamentowy", "", "&7Cena: &e100 &7monet czasu"))
             .toItemStack();
 
-    public ProductPresenterItem(String displayName, int slot, ItemStack itemStack) {
-        this.displayName = displayName;
-        this.slot = slot;
-        this.itemStack = itemStack;
+    @Override
+    public String displayName() {
+        return this.displayName;
     }
 
-    public ProductPresenterItem() {
+    @Override
+    public int slot() {
+        return this.slot;
     }
 
-    public ProductPresenter toProductPresenter() {
-        return new ProductPresenter(this.displayName, this.slot, this.itemStack);
+    @Override
+    public ItemStack itemPresentation() {
+        return this.itemStack;
     }
 }

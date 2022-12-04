@@ -10,19 +10,15 @@ import java.util.concurrent.CompletableFuture;
 public interface UserRepository extends DocumentRepository<UUID, User> {
 
     default CompletableFuture<User> findOrCreate(UUID uuid, String userName) {
-        CompletableFuture<User> completableFuture = new CompletableFuture<>();
-
-        CompletableFuture.runAsync(() -> {
+        return CompletableFuture.supplyAsync(() -> {
             User user = this.findOrCreateByPath(uuid);
 
             if (userName != null) {
                 user.updateName(userName);
             }
 
-            completableFuture.complete(user);
+            return user;
         });
-
-        return completableFuture;
     }
 
     default CompletableFuture<User> findOrCreate(UUID uuid) {

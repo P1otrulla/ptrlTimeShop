@@ -1,6 +1,8 @@
 package cc.dreamcode.timeshop.config.item;
 
 import cc.dreamcode.timeshop.builder.ItemBuilder;
+import cc.dreamcode.timeshop.product.Product;
+import cc.dreamcode.timeshop.product.ProductPresenter;
 import eu.okaeri.configs.OkaeriConfig;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -10,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ProductItem extends OkaeriConfig {
+public class ProductItem extends OkaeriConfig implements Product {
 
     public int price = 100;
 
@@ -25,12 +27,18 @@ public class ProductItem extends OkaeriConfig {
 
             new ItemStack(Material.DIAMOND_BLOCK, 1));
 
-    public ProductItem(int price, ProductPresenterItem presenter, List<ItemStack> elements) {
-        this.price = price;
-        this.presenter = presenter;
-        this.elements = elements;
+    @Override
+    public int price() {
+        return this.price;
     }
 
-    public ProductItem() {
+    @Override
+    public List<ItemStack> elements() {
+        return this.elements;
+    }
+
+    @Override
+    public ProductPresenter presenter() {
+        return this.presenter;
     }
 }

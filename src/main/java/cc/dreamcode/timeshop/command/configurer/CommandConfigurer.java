@@ -19,14 +19,10 @@ public class CommandConfigurer implements CommandEditor {
             return state;
         }
 
-        if (command.arguments.size() < 1) {
+        if (command.arguments.size() >= 1) {
             for (CommandConfiguration.CommandArgument argument : command.arguments) {
-                return state.name(command.name)
-                        .aliases(command.aliases, true)
-                        .permission(command.permissions, true)
-                        .editChild(argument.name, editor -> editor.aliases(argument.aliases, argument.removeOld));
+                state = state.editChild(argument.name, editor -> editor.name(argument.alias));
             }
-
         }
 
         return state.name(command.name)

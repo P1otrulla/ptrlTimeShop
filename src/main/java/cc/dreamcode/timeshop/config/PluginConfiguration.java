@@ -4,6 +4,8 @@ import cc.dreamcode.menu.serdes.bukkit.BukkitMenuBuilder;
 import cc.dreamcode.timeshop.builder.ItemBuilder;
 import cc.dreamcode.timeshop.config.item.ProductItem;
 import cc.dreamcode.timeshop.config.sub.StorageConfig;
+import cc.dreamcode.timeshop.product.Product;
+import cc.dreamcode.timeshop.product.ProductService;
 import com.google.common.collect.ImmutableMap;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
@@ -12,12 +14,13 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 @Header("## dreamTimeShop (Main-Config) ##")
-public final class PluginConfiguration extends OkaeriConfig {
+public final class PluginConfiguration extends OkaeriConfig implements ProductService {
 
     public StorageConfig storage = new StorageConfig();
 
@@ -43,4 +46,8 @@ public final class PluginConfiguration extends OkaeriConfig {
     @Comment({ "", "Ustaw konfiguracje produktów:" })
     public Map<String, ProductItem> products = Collections.singletonMap("diamonds", new ProductItem());
 
+    @Override
+    public Collection<Product> products() {
+        return Collections.unmodifiableCollection(this.products.values());
+    }
 }

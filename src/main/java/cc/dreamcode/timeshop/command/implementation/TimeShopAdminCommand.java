@@ -61,20 +61,14 @@ public class TimeShopAdminCommand {
         }
 
         user.setCurrency(currency);
-        user.save();
 
         this.messages.setCurrency.send(sender, ImmutableMap.of("USER", user.name(), "AMOUNT", currency));
     }
 
     @Execute(route = "reload")
     void reload(CommandSender sender) {
-        this.messages.save();
         this.messages.load();
-
-        this.configuration.save();
         this.configuration.load();
-
-        this.commands.save();
         this.commands.load();
 
         this.messages.reload.send(sender);

@@ -92,7 +92,7 @@ tasks.withType<JavaCompile> {
 
 tasks {
     runServer {
-        minecraftVersion("1.19.1")
+        minecraftVersion("1.17.1")
     }
 }
 
