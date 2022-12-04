@@ -12,33 +12,19 @@ import cc.dreamcode.timeshop.command.implementation.TimeShopCommand;
 import cc.dreamcode.timeshop.config.ConfigService;
 import cc.dreamcode.timeshop.config.MessagesConfiguration;
 import cc.dreamcode.timeshop.config.PluginConfiguration;
+import cc.dreamcode.timeshop.database.DatabaseProvider;
 import cc.dreamcode.timeshop.product.ProductService;
 import cc.dreamcode.timeshop.shared.CurrencyPluralizer;
 import cc.dreamcode.timeshop.user.User;
 import cc.dreamcode.timeshop.user.UserController;
 import cc.dreamcode.timeshop.user.UserPlayingTimeTask;
 import cc.dreamcode.timeshop.user.UserRepository;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.zaxxer.hikari.HikariConfig;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
-import eu.okaeri.configs.json.simple.JsonSimpleConfigurer;
-import eu.okaeri.configs.serdes.commons.SerdesCommons;
-import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
-import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
 import eu.okaeri.persistence.PersistenceCollection;
-import eu.okaeri.persistence.PersistencePath;
 import eu.okaeri.persistence.document.DocumentPersistence;
-import eu.okaeri.persistence.flat.FlatPersistence;
-import eu.okaeri.persistence.jdbc.H2Persistence;
-import eu.okaeri.persistence.jdbc.MariaDbPersistence;
-import eu.okaeri.persistence.mongo.MongoPersistence;
-import eu.okaeri.persistence.redis.RedisPersistence;
 import eu.okaeri.persistence.repository.RepositoryDeclaration;
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.RedisURI;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.command.CommandSender;
@@ -54,6 +40,8 @@ public class TimeShopPlugin extends JavaPlugin {
     private MessagesConfiguration messages;
     private CommandConfiguration command;
     private PluginConfiguration config;
+
+    private DatabaseProvider databaseProvider;
 
     private DocumentPersistence persistence;
     private UserRepository userRepository;
@@ -73,7 +61,8 @@ public class TimeShopPlugin extends JavaPlugin {
 
         PersistenceCollection userCollection = PersistenceCollection.of(UserRepository.class);
 
-        this.persistence = this.prepareStorage();
+        this.databaseProvider = new DatabaseProvider(this.config, this.getDataFolder());
+        this.persistence = this.databaseProvider.setupPersistance();
         this.persistence.registerCollection(userCollection);
 
         this.userRepository = RepositoryDeclaration.of(UserRepository.class)
@@ -116,52 +105,6 @@ public class TimeShopPlugin extends JavaPlugin {
         this.liteCommands.getPlatform().unregisterAll();
     }
 
-    DocumentPersistence prepareStorage() {
-        try { Class.forName("org.mariadb.jdbc.Driver"); } catch (ClassNotFoundException ignored) { }
-        try { Class.forName("org.h2.Driver"); } catch (ClassNotFoundException ignored) { }
-
-        PersistencePath persistencePath = PersistencePath.of(this.config.storage.prefix);
-
-        File dataFolder = this.getDataFolder();
-
-        switch (this.config.storage.storageType) {
-            case FLAT: {
-                return new DocumentPersistence(new FlatPersistence(dataFolder, ".yml"), YamlBukkitConfigurer::new, new SerdesBukkit(), new SerdesCommons());
-            }
-
-            case MYSQL: {
-                HikariConfig mariadbHikari = new HikariConfig();
-                mariadbHikari.setJdbcUrl(this.config.storage.uri);
-
-                return new DocumentPersistence(new MariaDbPersistence(persistencePath, mariadbHikari), JsonSimpleConfigurer::new, new SerdesBukkit(), new SerdesCommons());
-            }
-
-            case H2: {
-                HikariConfig jdbcHikari = new HikariConfig();
-                jdbcHikari.setJdbcUrl(this.config.storage.uri);
-
-                return new DocumentPersistence(new H2Persistence(persistencePath, jdbcHikari), JsonSimpleConfigurer::new, new SerdesBukkit(), new SerdesCommons());
-            }
-
-            case REDIS: {
-                RedisURI redisUri = RedisURI.create(this.config.storage.uri);
-                RedisClient redisClient = RedisClient.create(redisUri);
-
-                return new DocumentPersistence(new RedisPersistence(persistencePath, redisClient), JsonSimpleConfigurer::new, new SerdesBukkit(), new SerdesCommons());
-            }
-
-            case MONGO: {
-                MongoClient mongoClient = MongoClients.create(this.config.storage.uri);
-
-                return new DocumentPersistence(new MongoPersistence(persistencePath, mongoClient, this.config.storage.prefix), JsonSimpleConfigurer::new, new SerdesBukkit(), new SerdesCommons());
-            }
-
-            default: {
-                throw new RuntimeException("unsupported storage backend: " + this.config.storage.storageType);
-            }
-        }
-    }
-
     public ConfigService getConfigService() {
         return this.configService;
     }
@@ -176,6 +119,10 @@ public class TimeShopPlugin extends JavaPlugin {
 
     public PluginConfiguration getPluginConfiguration() {
         return this.config;
+    }
+
+    public DatabaseProvider getDatabaseProvider() {
+        return this.databaseProvider;
     }
 
     public UserRepository getUserRepository() {
