@@ -10,5 +10,7 @@ public interface Product {
 
     List<ItemStack> elements();
 
+    List<String> commands();
+
     ProductPresenter presenter();
 }

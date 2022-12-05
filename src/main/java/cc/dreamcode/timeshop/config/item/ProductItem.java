@@ -16,7 +16,7 @@ public class ProductItem extends OkaeriConfig implements Product {
 
     public int price = 100;
 
-    public ProductPresenterItem presenter = new ProductPresenterItem();
+    public List<String> commands = Collections.singletonList("gamemode creative {PLAYER}");
 
     public List<ItemStack> elements = Arrays.asList(ItemBuilder.of(Material.DIAMOND)
             .setName("&bDiamenty")
@@ -27,6 +27,8 @@ public class ProductItem extends OkaeriConfig implements Product {
 
             new ItemStack(Material.DIAMOND_BLOCK, 1));
 
+    public ProductPresenterItem presenter = new ProductPresenterItem();
+
     @Override
     public int price() {
         return this.price;
@@ -35,6 +37,11 @@ public class ProductItem extends OkaeriConfig implements Product {
     @Override
     public List<ItemStack> elements() {
         return this.elements;
+    }
+
+    @Override
+    public List<String> commands() {
+        return this.commands;
     }
 
     @Override

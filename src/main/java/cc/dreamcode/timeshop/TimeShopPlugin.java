@@ -69,13 +69,10 @@ public class TimeShopPlugin extends JavaPlugin {
                 .newProxy(this.persistence, userCollection, this.getClassLoader());
 
         CurrencyPluralizer currencyPluralizer = new CurrencyPluralizer(this.config, this.getLogger());
-        TimeShopMenu menu = new TimeShopMenu(this.messages, this.config, currencyPluralizer, this.userRepository, this.config);
+        TimeShopMenu menu = new TimeShopMenu(this.messages, this.config, currencyPluralizer, this.userRepository, this.config, this.getServer());
 
         this.getServer().getPluginManager().registerEvents(new UserController(this.userRepository), this);
         this.getServer().getScheduler().runTaskTimer(this, new UserPlayingTimeTask(this.userRepository, this.config, this.getServer()), 20, 20);
-
-        Metrics metrics = new Metrics(this, 17005);
-        metrics.addCustomChart(new SimplePie("users", () -> String.valueOf(this.userRepository.count())));
 
         this.liteCommands = LiteBukkitFactory.builder(this.getServer(), "dream-timeshop")
                 .argument(User.class, new UserArgument(this.userRepository))
@@ -91,6 +88,9 @@ public class TimeShopPlugin extends JavaPlugin {
                 .commandGlobalEditor(new CommandConfigurer(this.command))
 
                 .register();
+
+        Metrics metrics = new Metrics(this, 17005);
+        metrics.addCustomChart(new SimplePie("users", () -> String.valueOf(this.userRepository.count())));
     }
 
     @Override

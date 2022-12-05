@@ -13,6 +13,7 @@ import cc.dreamcode.timeshop.shared.ItemUtil;
 import cc.dreamcode.timeshop.user.User;
 import cc.dreamcode.timeshop.user.UserRepository;
 import com.google.common.collect.ImmutableMap;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,13 +24,15 @@ public class TimeShopMenu {
     private final CurrencyPluralizer pluralizer;
     private final UserRepository userRepository;
     private final ProductService service;
+    private final Server server;
 
-    public TimeShopMenu(MessagesConfiguration messages, PluginConfiguration configuration, CurrencyPluralizer pluralizer, UserRepository userRepository, ProductService service) {
+    public TimeShopMenu(MessagesConfiguration messages, PluginConfiguration configuration, CurrencyPluralizer pluralizer, UserRepository userRepository, ProductService service, Server server) {
         this.messages = messages;
         this.configuration = configuration;
         this.pluralizer = pluralizer;
         this.userRepository = userRepository;
         this.service = service;
+        this.server = server;
     }
 
     public void open(Player player) {
@@ -58,6 +61,8 @@ public class TimeShopMenu {
                 user.removeCurrency(product.price());
 
                 product.elements().forEach(element -> ItemUtil.giveItem(player, element));
+
+                product.commands().forEach(command -> this.server.dispatchCommand(this.server.getConsoleSender(), command.replace("{PLAYER}", player.getName())));
 
                 this.messages.productBought.send(player, ImmutableMap.of(
                         "PRODUCT", presenter.displayName(),
