@@ -80,6 +80,7 @@ bukkit {
     name = "dreamTimeShop"
     version = "${project.version}"
     description = "DreamCode.cc - https://discord.gg/dreamcode"
+    softDepend = listOf("PlaceholderAPI")
 }
 
 tasks.withType<JavaCompile> {
