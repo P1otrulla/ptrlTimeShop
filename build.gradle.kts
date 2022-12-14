@@ -33,6 +33,9 @@ dependencies {
     implementation("eu.okaeri:okaeri-configs-serdes-commons:4.0.6")
     implementation("eu.okaeri:okaeri-configs-json-simple:4.0.6")
 
+    // pluarlize
+    implementation("eu.okaeri:okaeri-pluralize:1.1.0")
+
     // persistence
     implementation ("eu.okaeri:okaeri-persistence-flat:2.0.0-beta.1")
     implementation ("eu.okaeri:okaeri-persistence-jdbc:2.0.0-beta.1")
