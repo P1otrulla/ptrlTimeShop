@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 @Header("## dreamTimeShop (Main-Config) ##")
+@Header("## Placeholders: ##")
+@Header("## %dreamtimeshop_currency% - monety gracza ##")
 public final class PluginConfiguration extends OkaeriConfig implements ProductService {
 
     public StorageConfig storage = new StorageConfig();
