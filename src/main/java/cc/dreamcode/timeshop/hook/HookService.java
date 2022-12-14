@@ -4,12 +4,8 @@ import cc.dreamcode.timeshop.hook.placeholderapi.PlaceholderApiExpansion;
 import cc.dreamcode.timeshop.user.UserRepository;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class HookService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(HookService.class);
 
     private final UserRepository userRepository;
     private final Server server;
@@ -29,7 +25,7 @@ public class HookService {
         if (pluginManager.isPluginEnabled(pluginName)) {
             hook.initialize();
 
-            LOGGER.info("Successfully hooked into " + pluginName + " hook!");
+            this.server.getLogger().info("Successfully hooked into " + pluginName + " hook!");
         }
     }
 }
