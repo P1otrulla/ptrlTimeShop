@@ -16,6 +16,7 @@ repositories {
     mavenCentral()
     mavenLocal()
 
+    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
     maven { url = uri("https://storehouse.okaeri.eu/repository/maven-public") }
     maven { url = uri("https://papermc.io/repo/repository/maven-public/")}
     maven { url = uri("https://repository.minecodes.pl/releases") }
@@ -31,9 +32,6 @@ dependencies {
     implementation("eu.okaeri:okaeri-configs-serdes-bukkit:4.0.6")
     implementation("eu.okaeri:okaeri-configs-serdes-commons:4.0.6")
     implementation("eu.okaeri:okaeri-configs-json-simple:4.0.6")
-
-    // pluarlize
-    implementation("eu.okaeri:okaeri-pluralize:1.1.0")
 
     // persistence
     implementation ("eu.okaeri:okaeri-persistence-flat:2.0.0-beta.1")
@@ -62,6 +60,9 @@ dependencies {
 
     // command framework
     implementation ("dev.rollczi.litecommands:bukkit:2.7.0")
+
+    // placeholders
+    compileOnly("me.clip:placeholderapi:2.11.2")
 }
 
 tasks.withType<JavaCompile> {

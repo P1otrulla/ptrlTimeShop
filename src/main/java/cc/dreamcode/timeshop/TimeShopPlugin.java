@@ -13,6 +13,7 @@ import cc.dreamcode.timeshop.config.ConfigService;
 import cc.dreamcode.timeshop.config.MessagesConfiguration;
 import cc.dreamcode.timeshop.config.PluginConfiguration;
 import cc.dreamcode.timeshop.database.DatabaseProvider;
+import cc.dreamcode.timeshop.hook.HookService;
 import cc.dreamcode.timeshop.product.ProductService;
 import cc.dreamcode.timeshop.shared.CurrencyPluralizer;
 import cc.dreamcode.timeshop.user.User;
@@ -46,6 +47,8 @@ public class TimeShopPlugin extends JavaPlugin {
     private DocumentPersistence persistence;
     private UserRepository userRepository;
 
+    private HookService hookService;
+
     private LiteCommands<CommandSender> liteCommands;
 
     @Override
@@ -76,6 +79,9 @@ public class TimeShopPlugin extends JavaPlugin {
         this.getServer().getScheduler().runTaskTimer(this,
                 new UserPlayingTimeTask(this.userRepository, this.config, this.getServer()), 20, 20
         );
+
+        this.hookService = new HookService(this.userRepository, getServer());
+        this.hookService.init();
 
         this.liteCommands = LiteBukkitFactory.builder(this.getServer(), "dream-timeshop")
                 .argument(User.class, new UserArgument(this.userRepository))
@@ -134,6 +140,10 @@ public class TimeShopPlugin extends JavaPlugin {
 
     public ProductService getProductService() {
         return this.config;
+    }
+
+    public HookService getHookService() {
+        return this.hookService;
     }
 
     public LiteCommands<CommandSender> getLiteCommands() {
