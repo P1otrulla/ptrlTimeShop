@@ -76,13 +76,6 @@ bukkit {
     name = "dreamTimeShop"
     version = "${project.version}"
     description = "DreamCode.cc - https://discord.gg/dreamcode"
-
-    commands {
-        register("timeshop") {
-            description = "timeshop command"
-            aliases = listOf("sklepczas")
-        }
-    }
 }
 
 tasks.withType<JavaCompile> {

@@ -72,7 +72,10 @@ public class TimeShopPlugin extends JavaPlugin {
         TimeShopMenu menu = new TimeShopMenu(this.messages, this.config, currencyPluralizer, this.userRepository, this.config, this.getServer());
 
         this.getServer().getPluginManager().registerEvents(new UserController(this.userRepository), this);
-        this.getServer().getScheduler().runTaskTimer(this, new UserPlayingTimeTask(this.userRepository, this.config, this.getServer()), 20, 20);
+
+        this.getServer().getScheduler().runTaskTimer(this,
+                new UserPlayingTimeTask(this.userRepository, this.config, this.getServer()), 20, 20
+        );
 
         this.liteCommands = LiteBukkitFactory.builder(this.getServer(), "dream-timeshop")
                 .argument(User.class, new UserArgument(this.userRepository))
