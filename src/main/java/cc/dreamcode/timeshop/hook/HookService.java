@@ -20,7 +20,7 @@ public class HookService {
     }
 
     public void init() {
-        setupBridge("PlaceholderAPI", () -> new PlaceholderApiExpansion(this.userRepository));
+        setupBridge("PlaceholderAPI", () -> new PlaceholderApiExpansion(this.userRepository).register());
     }
 
     private void setupBridge(String pluginName, HookInitializer hook) {
