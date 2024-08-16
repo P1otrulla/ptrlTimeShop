@@ -1,2 +1,2 @@
-rootProject.name = "dreamTimeShop"
+rootProject.name = "ptrlTimeShop"
 
