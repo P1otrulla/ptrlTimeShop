@@ -25,6 +25,8 @@ public class TimeShopPlugin extends JavaPlugin {
     private MessagesConfig messagesConfig;
     private PluginConfig pluginConfig;
 
+    private TimeShopPluralizer pluralizer;
+
     private BridgeService bridgeService;
 
     private AudienceProvider audienceProvider;
@@ -37,14 +39,14 @@ public class TimeShopPlugin extends JavaPlugin {
 
     private TimeShopMultification multification;
 
-    private TimeShopPluralizer pluralizer = new TimeShopPluralizer(this.pluginConfig);
-
     @Override
     public void onEnable() {
         this.configService = new ConfigService();
 
         this.messagesConfig = this.configService.create(MessagesConfig.class, new File(this.getDataFolder(), "messages.yml"));
         this.pluginConfig = this.configService.create(PluginConfig.class, new File(this.getDataFolder(), "config.yml"));
+
+        this.pluralizer = new TimeShopPluralizer(this.pluginConfig);
 
         this.audienceProvider = BukkitAudiences.create(this);
         this.miniMessage = MiniMessage.builder()
